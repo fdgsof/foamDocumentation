@@ -3,5 +3,5 @@ Some snippets of random documentation for OpenFOAM stuff.
 
 
 
-[Get started!](gettingStarted.md)
-[Set up your environment](softwareEnvironment.md)
+1. [Get started!](gettingStarted.md)  
+2. Set up your environment](softwareEnvironment.md)
