@@ -14,3 +14,7 @@ include:
   - PULL_REQUEST_TEMPLATE.md
   - softwareEnvionment.md
   - gettingStarted.md
+
+
+
+theme: jekyll-theme-architect
