@@ -1,5 +1,9 @@
+remote_theme: pages-themes/leap-day@v0.2.0
 plugins:
   - jekyll-relative-links
+  - jekyll-remote-theme # add this line to the plugins list if you already have one
+  
+
 relative_links:
   enabled: true
   collections: true
@@ -14,7 +18,3 @@ include:
   - PULL_REQUEST_TEMPLATE.md
   - softwareEnvionment.md
   - gettingStarted.md
-
-
-
-theme: jekyll-theme-architect
