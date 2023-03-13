@@ -83,8 +83,8 @@ Doesn't really support math and code blocks in a nice way
 ## Citations
 ### Zotero
 The only option which supports all relevant operating systems (Win, Mac, Linux, iOS, Android).
-Supported also by most scientific tools such as SciFlow or Overlea´f.
-Can be connected to UFZ cloud through WebDAV + Zotero Account -> full "cloud" citation manager for free
+Supported also by most scientific tools such as SciFlow or Overleaf.
+Can be connected to a private cloud through WebDAV + Zotero Account -> full "cloud" citation manager for free
 Very nice iOS app (for reading and annotating papers on a tablet)
 Collaboration is possible through that cloud solution.
 
