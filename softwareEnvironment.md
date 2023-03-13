@@ -65,9 +65,10 @@ Works quite well. For advanced processing, pvpython can be useful (paraview pyth
 
 ## Notes
 ### Joplin
-FOSS markdown notes app. Can be connected to UFZ nextcloud (through NExtcloud or WebDAV) to have a backed up notetaking app environment.
+FOSS markdown notes app. Can be connected to Nextcloud (through Nextcloud or WebDAV) to have a backed up / synced notetaking app environment.
 With all the markdown advantages (such as support of math, code blocks, quick and easy formatting, file attachments, interoperability)
 Customization possible through addins / plugins
+Available for all platforms (incl. mobile)
 https://joplinapp.org/
 
 ### Notion
