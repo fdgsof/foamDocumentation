@@ -1,0 +1,80 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1906                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// simple blockMeshDict template, with definition of the corner coordinates
+// in the beginning.
+
+scale   1;
+
+xmin -0.5;
+xmax 0.5;
+ymin -0.5;
+ymax 0.5;
+zmin -2.3;
+zmax 0.7;
+
+vertices
+(
+    ($xmin $ymin $zmin) // vertex 0
+    ($xmax $ymin $zmin) // vertex 1
+    ($xmax $ymax $zmin) // vertex 2
+    ($xmin $ymax $zmin) // vertex 3
+    ($xmin $ymin $zmax) // vertex 4
+    ($xmax $ymin $zmax) // vertex 5
+    ($xmax $ymax $zmax) // vertex 6
+    ($xmin $ymax $zmax) // vertex 7
+);
+
+
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) (40 40 120) simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+boundary
+(
+    walls
+    {
+        type wall;
+        faces
+        (
+            (0 3 2 1)
+            (2 6 5 1)
+            (1 5 4 0)
+            (3 7 6 2)
+            (0 4 7 3)
+        );
+    }
+    atmosphere
+    {
+        type patch;
+        faces
+        (
+            (4 5 6 7)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //
