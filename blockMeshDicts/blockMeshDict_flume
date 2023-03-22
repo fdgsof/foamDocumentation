@@ -1,0 +1,232 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1906                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   1;
+
+// BlockMeshDict for a lab Flume in 3D simulation
+// Definition with 4 cross sections:
+// 1. Upstream End
+// 2. Transition Start
+// 3. Transition End / Start of Flume
+// 4. Outlet
+// All sections are defined as rectangles
+// Basic parameters for mesh generation are entered in the two sections below.
+
+// GEOMETRIC INPUT
+iLength 1;               // Length of Intake Section (1)
+iWidth 1.5;              // Width of Intake Section (2)
+tLength 2;               // Length of Transition Section (3)
+fDepth 1;                // Flume Depth (global!) (4)
+fWidth 1;                // Flume Width (5)
+fLength 20;              // Flume Length (6)
+fInclination 0;      // Flume Inclination (Intake and Transition are horizontal [m/m]
+
+// Cell Counts
+iCellX 10;  // x cell count Intake
+tCellX 20;  // x cell count Transition
+fCellX 200; // x cell count Flume
+
+cellY 10;   // y cell count global
+cellZ 20;   // z cell count global
+
+
+
+//   Geometry: Schematic Plan View
+//   _______
+//          \
+//    |      \ _______________________
+//    |            |
+//    2            5    
+//    |        ____|__________________
+//    |      /
+//   _______/
+//   
+//   |_____|__|_______________________|
+//       1   3           6
+//   
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// CALCULATION OF DEFINING MESH VERTICES
+
+
+// Intake I => Box Shape
+    // Geometry
+    ixmin #eval { 0-$tLength-$iLength };
+    ixmax #eval { 0-$tLength };
+    iymin #eval { 0-($iWidth*0.5) };
+    iymax #eval { 0+($iWidth*0.5) };
+    izmin 0;
+    izmax $fDepth;
+
+
+// Transition T => Transition Shape
+// y values have upstream (tu) and downstream (td) values
+    
+    // Geometry
+    txmin $ixmax;
+    txmax 0;
+    tuymin $iymin;
+    tuymax $iymax;
+    tdymin #eval { 0-($fWidth*0.5) };
+    tdymax #eval { 0+($fWidth*0.5) };
+    tzmin 0;
+    tzmax $fDepth;
+
+
+// Flume F
+    fxmin 0;
+    fxmax $fLength;
+    fymin $tdymin;
+    fymax $tdymax;
+
+    // z-coordinates upstream section
+    fuzmin 0;
+    fuzmax $fDepth;
+
+    // z-coordinates downstream section
+    fdzmin #eval { $fuzmin-($fLength *$fInclination) };
+    fdzmax #eval { $fuzmax-($fLength*$fInclination) };
+
+// Outlet O (only selected vertices required to define patch)
+    ouxmin #eval { $fLength-0.5 };
+    oymin $fymin;
+    oymax $fymax;
+    ouzmin #eval { 0-($ouxmin*$fInclination) };
+    ouzmax #eval { $fDepth-($ouxmin*$fInclination) };
+
+
+
+// counts for 
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// BOTTOM OF GEOMETRY DEFINTION ||  START OF BLOCKMESHDICT ENTRIES * * * * * //
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+vertices
+(
+    // Intake Block
+    ($ixmin $iymin $izmin)      // vertex 0
+    ($ixmax $iymin $izmin)      // vertex 1
+    ($ixmax $iymax $izmin)      // vertex 2
+    ($ixmin $iymax $izmin)      // vertex 3
+    ($ixmin $iymin $izmax)      // vertex 4
+    ($ixmax $iymin $izmax)      // vertex 5
+    ($ixmax $iymax $izmax)      // vertex 6
+    ($ixmin $iymax $izmax)      // vertex 7
+        
+    // Transition Block
+    ($txmin $tuymin $tzmin)     // vertex 8   1-0
+    ($txmax $tdymin $tzmin)     // vertex 9   1-1
+    ($txmax $tdymax $tzmin)     // vertex 10  1-2
+    ($txmin $tuymax $tzmin)     // vertex 11  1-3
+    ($txmin $tuymin $tzmax)     // vertex 12  1-4
+    ($txmax $tdymin $tzmax)     // vertex 13  1-5
+    ($txmax $tdymax $tzmax)     // vertex 14  1-6
+    ($txmin $tuymax $tzmax)     // vertex 15  1-7
+    
+    // Flume Block
+    ($fxmin $fymin $fuzmin)     // vertex 16  2-0
+    ($fxmax $fymin $fdzmin)     // vertex 17  2-1
+    ($fxmax $fymax $fdzmin)     // vertex 18  2-2
+    ($fxmin $fymax $fuzmin)     // vertex 19  2-3
+    ($fxmin $fymin $fuzmax)     // vertex 20  2-4
+    ($fxmax $fymin $fdzmax)     // vertex 21  2-5
+    ($fxmax $fymax $fdzmax)     // vertex 22  2-6
+    ($fxmin $fymax $fuzmax)     // vertex 23  2-7
+
+
+);
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) ($iCellX $cellY $cellZ) simpleGrading (1 1 5)              //intake block
+    hex (8 9 10 11 12 13 14 15) ($tCellX $cellY $cellZ) simpleGrading (1 1 5)        // transition block
+    hex (16 17 18 19 20 21 22 23) ($fCellX $cellY $cellZ) simpleGrading (1 1 5)      // flume block vert. outlet
+
+);
+
+edges
+(
+);
+
+boundary
+(
+    // Dummy patch to trigger overset interpolation before any other
+    // bcs
+
+    concretewall 
+    {
+        type wall; 
+        faces
+        (
+            (0 1 5 4)
+            (8 9 13 12)
+            (16 17 21 20)
+            (3 7 6 2)
+            (11 15 14 10)
+            (19 23 22 18)
+            (0 3 2 1)       // bottom
+            (8 11 10 9)     // bottom
+            (17 18 22 21)   // d/s end (vertical outlet)
+            (16 19 18 17)   // bottom (for vertical outlet)
+        );
+    }
+
+    atmosphere
+    {
+        type patch;
+        faces
+        (
+            (4 5 6 7)
+            (12 13 14 15)
+            (20 21 22 23)
+        );
+    }
+
+    intake 
+    {
+        type patch;
+        faces
+        (
+            (0 4 7 3)
+        );
+    }
+    
+    outlet 
+    {
+        type patch;
+        faces
+        (
+            // set by topoSet
+        );
+    }
+    
+    i_ds {type patch; faces ((1 2 6 5));}
+    t_us {type patch; faces ((8 12 15 11));}
+    t_ds {type patch; faces ((9 10 14 13));}
+    f_us {type patch; faces ((16 20 23 19));}
+);
+
+mergePatchPairs
+(
+    (i_ds t_us)  // merge intake-transition
+    (t_ds f_us) // merge transition-flume
+
+);
+
+// ************************************************************************* //
