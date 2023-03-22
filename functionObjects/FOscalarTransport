@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2106                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+sTransport
+    {
+        type            scalarTransport;
+        libs            (solverFunctionObjects);
+
+        enabled         true;
+        writeControl    outputTime;
+        writeInterval   1;
+
+        field           T;
+        bounded01       false;
+        phase           alpha.water;
+        D               5e-08;
+
+        write           true;
+        resetOnStartUp  false;
+
+        fvOptions
+        {
+            massSource1
+            {
+                type            scalarSemiImplicitSource;
+
+                timeStart       0;
+                duration        1;
+                selectionMode   points;
+                points           ((0 5 1));
+                volumeMode      specific;
+                injectionRateSuSp
+                    {
+                        T     (1000 0); // kg/s
+                    }
+            }
+        }
+    }
+
+
+
+// ************************************************************************* //
