@@ -37,6 +37,12 @@ UFZ has some ancient AutoCAD license. But BricsCAD (essentially an AutoCAD clone
 ### OpenSCAD
 For parametric STL generation
 
+### QGIS
+The essential tool when working with "real" geometries.
+
+### MeshLab
+Quite useful for all kinds of cleanup and conversion work on STL files (and other mesh-type files).
+
 ### GUI options for blockMesh etc.
 THere are several options to have a graphical interface for blockMesh or snappyHexMesh. There are add-ins for Blender and FreeCAD, processing toolboxes such as the HELYX-Toolbox, IHfoam, simscale and many more. Helyx and IHfoam might be useful to get started, but in the end it's more efficient to work with "normal" textfiles (and without those GUI helpers) - especially when working on a cluster later on.
 
@@ -53,7 +59,6 @@ Other options for 2D-meshing are gmsh or the salome-toolbox.
 pyFoam is a python add-on for OpenFOAM. There are countless utilities. Some are working well, some not so much. There are utilities to quickly create multiple case variations, clean up cases etc. 
 
 For checking the case at runtime, the pyFoamPlotWatcher (in conjunction with foamRun) is useful. (needs x-window output though, so either x-forwarding or to execute through a virtual desktop environment).
-
 
 ## PostProcessing
 ### Paraview
